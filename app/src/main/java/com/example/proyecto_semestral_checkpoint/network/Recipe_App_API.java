@@ -14,6 +14,9 @@ import retrofit2.http.POST;
 
 public interface Recipe_App_API {
 
+    @POST("users")
+    Call<User> register(@Body User user);
+
     @POST("users/login")
     Call<Log_In_User> login(@Body User user);
 
