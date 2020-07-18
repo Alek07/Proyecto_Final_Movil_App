@@ -15,6 +15,7 @@ import com.example.proyecto_semestral_checkpoint.R;
 import com.example.proyecto_semestral_checkpoint.adapter.CategoryMenuAdapter;
 import com.example.proyecto_semestral_checkpoint.adapter.RecipesRecyclerViewAdapter;
 import com.example.proyecto_semestral_checkpoint.models.Recipe;
+import com.example.proyecto_semestral_checkpoint.network.ApiClient;
 import com.example.proyecto_semestral_checkpoint.network.Recipe_App_API;
 
 import java.lang.reflect.Array;
@@ -34,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class HomeFragment extends Fragment {
 
-    private Recipe_App_API recipe_app_api;
+    private Recipe_App_API recipe_app_api = ApiClient.getClient().create(Recipe_App_API.class);
     ArrayList<Recipe> recipes = new ArrayList<>();
     private ArrayList<String> cNames = new ArrayList<>();
     private ArrayList<Integer> cImages = new ArrayList<>();
@@ -56,17 +57,7 @@ public class HomeFragment extends Fragment {
 
         initCategoryMenu();
 
-        setupRetrofit();
         initRecipes_With_RecyclerView();
-    }
-
-    private void setupRetrofit() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://recetas-api-v1.herokuapp.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        recipe_app_api = retrofit.create(Recipe_App_API.class);
     }
 
     private void initCategoryMenu() {
