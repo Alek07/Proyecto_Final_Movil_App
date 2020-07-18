@@ -1,5 +1,6 @@
 package com.example.proyecto_semestral_checkpoint;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -62,7 +63,8 @@ public class LoginActivity extends AppCompatActivity {
         Register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent register = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(register);
             }
         });
     }
