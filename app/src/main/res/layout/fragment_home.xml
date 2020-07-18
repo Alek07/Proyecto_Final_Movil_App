@@ -11,10 +11,20 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/maintext"
+        android:id="@+id/main_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Look by categories"
+        android:text="Jumm, Welcome Back !"
+        android:textColor="#000"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/category_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Look recipes by categories"
         android:textColor="#000"
         android:textSize="25sp"
         android:textStyle="bold" />
@@ -31,10 +41,17 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="All recipes"
+        android:text="All the recipes"
         android:textColor="#000"
-        android:textSize="40sp"
+        android:textSize="25sp"
         android:textStyle="bold" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recipes_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </LinearLayout>
