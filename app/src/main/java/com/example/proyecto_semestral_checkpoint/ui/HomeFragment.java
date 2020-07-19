@@ -1,5 +1,6 @@
 package com.example.proyecto_semestral_checkpoint.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -82,15 +83,16 @@ public class HomeFragment extends Fragment {
 
     private void initRecipes_With_RecyclerView() {
 
-
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         RecyclerView recyclerView = getView().findViewById(R.id.recipes_view);
         recyclerView.setLayoutManager(layoutManager);
         RecipesRecyclerViewAdapter adapter = new RecipesRecyclerViewAdapter(getContext(), recipes);
         recyclerView.setAdapter(adapter);
 
-        Call<ArrayList<Recipe>> call = recipe_app_api.getRecipe("Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZjBlMmU1ZDMxOGZkMjAwMTc2NTI4MWYiLCJpYXQiOjE1OTUwMzEwOTF9._hooiwDTgVQ40piTwNwsoLn58GEhiETM2s9_kHsLF0E");
+        SharedPreferences settings = getActivity().getSharedPreferences("User", getContext().MODE_PRIVATE);
+        String token = settings.getString("token", "");
+
+        Call<ArrayList<Recipe>> call = recipe_app_api.getRecipe("Bearer " + token);
 
         call.enqueue(new Callback<ArrayList<Recipe>>() {
             @Override

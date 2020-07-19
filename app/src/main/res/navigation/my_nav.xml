@@ -15,6 +15,12 @@
             app:destination="@id/recipeFragment"
             app:enterAnim="@android:anim/slide_out_right"
             app:exitAnim="@android:anim/slide_in_left" />
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment" />
     </fragment>
 
     <fragment
@@ -34,8 +40,17 @@
         android:label="fragment_favorites"
         tools:layout="@layout/fragment_favorites" >
         <action
-            android:id="@+id/action_favoritesFragment_to_recipeFragment2"
-            app:destination="@id/recipeFragment" />
+            android:id="@+id/action_favoritesFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.proyecto_semestral_checkpoint.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 
 </navigation>
