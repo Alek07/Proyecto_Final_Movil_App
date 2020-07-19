@@ -1,6 +1,7 @@
 package com.example.proyecto_semestral_checkpoint;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -10,6 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -114,6 +116,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
             }
+            case R.id.profileNav: {
+
+                if(isValidDestination(R.id.profileFragment))
+                    Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.profileFragment);
+
+                break;
+            }
             case R.id.logout: {
                 SharedPreferences settings = getSharedPreferences("User", MODE_PRIVATE);
                 String token = settings.getString("token", "");
@@ -145,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    //Check the backstack if a fragment is displayed
+    //Check the back stack if a fragment is displayed
     private boolean isValidDestination(int destination) {
         return destination != Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId();
     }
@@ -176,5 +185,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .error(R.mipmap.ic_launcher_round);
 
         Glide.with(this).load(ApiClient.getBaseUrl() + "users/" + id + "/avatar").apply(options).into(Image);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
