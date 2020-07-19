@@ -45,7 +45,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.proyecto_semestral_checkpoint.ProfileFragment"
+        android:name="com.example.proyecto_semestral_checkpoint.ui.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
