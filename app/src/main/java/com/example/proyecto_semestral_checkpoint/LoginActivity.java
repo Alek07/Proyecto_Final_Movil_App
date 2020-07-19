@@ -1,6 +1,7 @@
 package com.example.proyecto_semestral_checkpoint;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -85,7 +86,17 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 Log_In_User user = response.body();
-                Log.d("USER", "onResponse: " + user.getUser().getEmail());
+
+                SharedPreferences settings = LoginActivity.this.getSharedPreferences("User", MODE_PRIVATE);
+                SharedPreferences.Editor edit = settings.edit();
+                edit.putString("_id", user.getUser().getId());
+                edit.putString("token", user.getToken());
+                edit.putString("user_name", user.getUser().getName());
+                edit.putString("email", user.getUser().getEmail());
+                edit.apply();
+
+                Intent main = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(main);
             }
 
             @Override

@@ -10,16 +10,31 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.example.proyecto_semestral_checkpoint.models.User;
+import com.example.proyecto_semestral_checkpoint.network.ApiClient;
+import com.example.proyecto_semestral_checkpoint.network.Recipe_App_API;
 import com.google.android.material.navigation.NavigationView;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    View headerView;
     private AppBarConfiguration appBarConfiguration;
 
     @Override
@@ -29,8 +44,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.navigationView);
+        headerView = navigationView.getHeaderView(0);
 
         init();
+
+        userLogged();
 
         findViewById(R.id.menu_icon).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +114,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 break;
             }
+            case R.id.logout: {
+                SharedPreferences settings = getSharedPreferences("User", MODE_PRIVATE);
+                String token = settings.getString("token", "");
+
+                Recipe_App_API recipe_app_api = ApiClient.getClient().create(Recipe_App_API.class);
+                Call<User> call = recipe_app_api.logout("Bearer " + token);
+                call.enqueue(new Callback<User>() {
+                    @Override
+                    public void onResponse(Call<User> call, Response<User> response) {
+                        if(!response.isSuccessful()) {
+                            return;
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<User> call, Throwable t) {
+
+                    }
+                });
+
+                Intent login = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(login);
+                break;
+            }
 
         }
 
@@ -113,5 +154,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onSupportNavigateUp() {
         return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.nav_host_fragment), drawerLayout);
+    }
+
+    //Set logged user info
+    private void userLogged() {
+        TextView User_name =  headerView.findViewById(R.id.user_name);
+        TextView Email =  headerView.findViewById(R.id.email);
+        ImageView Image =  headerView.findViewById(R.id.profile_image);
+
+        SharedPreferences settings = getSharedPreferences("User", MODE_PRIVATE);
+        String userName = settings.getString("user_name", "User Name");
+        String email = settings.getString("email", "User Name");
+        String id = settings.getString("_id", "no id");
+
+        User_name.setText(userName);
+        Email.setText(email);
+
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.mipmap.ic_launcher_round)
+                .error(R.mipmap.ic_launcher_round);
+
+        Glide.with(this).load(ApiClient.getBaseUrl() + "users/" + id + "/avatar").apply(options).into(Image);
     }
 }
