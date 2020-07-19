@@ -20,6 +20,15 @@ public interface Recipe_App_API {
     @POST("users/login")
     Call<Log_In_User> login(@Body User user);
 
+    @POST("users/logoutAll")
+    Call<User> logout(@Header("Authorization") String token);
+
     @GET("recipes")
     Call<ArrayList<Recipe>> getRecipe(@Header("Authorization") String token);
+
+    @GET("users/me/recipes")
+    Call<ArrayList<Recipe>> getUserRecipe(@Header("Authorization") String token);
+
+    @GET("users/me/favorites")
+    Call<ArrayList<Recipe>> getUserFavorites(@Header("Authorization") String token);
 }
