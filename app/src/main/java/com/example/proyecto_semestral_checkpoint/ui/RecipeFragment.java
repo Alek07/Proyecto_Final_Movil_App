@@ -60,7 +60,8 @@ public class RecipeFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 Recipe recipe = recipes.get(position);
-                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_recipeFragment_to_createRecipesFragment);
+                RecipeFragmentDirections.ActionRecipeFragmentToViewRecipeFragment action = RecipeFragmentDirections.actionRecipeFragmentToViewRecipeFragment(recipe);
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(action);
             }
         });
 

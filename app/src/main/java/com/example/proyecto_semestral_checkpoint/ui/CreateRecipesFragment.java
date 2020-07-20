@@ -140,12 +140,13 @@ public class CreateRecipesFragment extends Fragment {
         String author = settings.getString("_id", "null");
         String token = settings.getString("token", "");
 
-        Recipe recipe = new Recipe();
-        recipe.setName(Name.getText().toString());
-        recipe.setIngredients(ingredients);
-        recipe.setDescription(Description.getText().toString());
-        recipe.setCategory(category);
-        recipe.setAuthor(author);
+        Recipe recipe = new Recipe(
+                Name.getText().toString(),
+                category,
+                Description.getText().toString(),
+                author,
+                ingredients
+        );
 
         Call<Recipe> call = recipe_app_api.createRecipe("Bearer " + token, recipe);
 

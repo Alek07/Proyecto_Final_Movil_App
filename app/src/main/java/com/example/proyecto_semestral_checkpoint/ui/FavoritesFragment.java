@@ -56,7 +56,9 @@ public class FavoritesFragment extends Fragment {
         adapter.setOnItemClickListener(new RecipesRecyclerViewAdapter.onItemClickListener() {
             @Override
             public void onItemClick(int position) {
-
+                Recipe recipe = recipes.get(position);
+                FavoritesFragmentDirections.ActionFavoritesFragmentToViewRecipeFragment action = FavoritesFragmentDirections.actionFavoritesFragmentToViewRecipeFragment(recipe);
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(action);
             }
         });
 
