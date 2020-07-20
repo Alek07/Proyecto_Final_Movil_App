@@ -19,6 +19,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.Path;
 
 public interface Recipe_App_API {
 
@@ -40,6 +41,9 @@ public interface Recipe_App_API {
 
     @POST("recipes")
     Call<Recipe> createRecipe(@Header("Authorization") String token, @Body Recipe recipe);
+
+    @PATCH("recipes/{id}")
+    Call<Recipe> updateRecipe(@Path("id") String id, @Header("Authorization") String token, @Body Recipe recipe);
 
     @GET("users/me")
     Call<User> getUser(@Header("Authorization") String token);

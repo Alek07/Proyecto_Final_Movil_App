@@ -94,7 +94,9 @@ public class HomeFragment extends Fragment {
         adapter.setOnItemClickListener(new RecipesRecyclerViewAdapter.onItemClickListener() {
             @Override
             public void onItemClick(int position) {
-
+                Recipe recipe = recipes.get(position);
+                HomeFragmentDirections.ActionHomeFragmentToViewRecipeFragment action = HomeFragmentDirections.actionHomeFragmentToViewRecipeFragment(recipe);
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(action);
             }
         });
 
