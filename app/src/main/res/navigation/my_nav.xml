@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_homeFragment_to_favoritesFragment"
             app:destination="@id/favoritesFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_viewRecipeFragment"
+            app:destination="@id/viewRecipeFragment" />
     </fragment>
 
     <fragment
@@ -36,6 +39,9 @@
         <action
             android:id="@+id/action_recipeFragment_to_createRecipesFragment"
             app:destination="@id/createRecipesFragment" />
+        <action
+            android:id="@+id/action_recipeFragment_to_viewRecipeFragment"
+            app:destination="@id/viewRecipeFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
@@ -45,6 +51,9 @@
         <action
             android:id="@+id/action_favoritesFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_favoritesFragment_to_viewRecipeFragment"
+            app:destination="@id/viewRecipeFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -62,6 +71,21 @@
         tools:layout="@layout/fragment_create_recipes" >
         <action
             android:id="@+id/action_createRecipesFragment_to_recipeFragment"
+            app:destination="@id/recipeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/viewRecipeFragment"
+        android:name="com.example.proyecto_semestral_checkpoint.ui.ViewRecipeFragment"
+        android:label="fragment_view_recipe"
+        tools:layout="@layout/fragment_view_recipe" >
+        <action
+            android:id="@+id/action_viewRecipeFragment_to_favoritesFragment"
+            app:destination="@id/favoritesFragment" />
+        <action
+            android:id="@+id/action_viewRecipeFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_viewRecipeFragment_to_recipeFragment"
             app:destination="@id/recipeFragment" />
     </fragment>
 
