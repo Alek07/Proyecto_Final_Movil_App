@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -51,6 +52,13 @@ public class FavoritesFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         RecipesRecyclerViewAdapter adapter = new RecipesRecyclerViewAdapter(getContext(), recipes);
         recyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new RecipesRecyclerViewAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+
+            }
+        });
 
         SharedPreferences settings = getActivity().getSharedPreferences("User", getContext().MODE_PRIVATE);
         String token = settings.getString("token", "");
