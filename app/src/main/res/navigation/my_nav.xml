@@ -87,6 +87,10 @@
         <action
             android:id="@+id/action_viewRecipeFragment_to_recipeFragment"
             app:destination="@id/recipeFragment" />
+        <argument
+            android:name="recipe"
+            app:argType="com.example.proyecto_semestral_checkpoint.models.Recipe"
+            app:nullable="true" />
     </fragment>
 
 </navigation>
