@@ -8,9 +8,11 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.proyecto_semestral_checkpoint.R;
 import com.example.proyecto_semestral_checkpoint.adapter.CategoryMenuAdapter;
@@ -53,6 +55,14 @@ public class RecipeFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         RecipesRecyclerViewAdapter adapter = new RecipesRecyclerViewAdapter(getContext(), recipes);
         recyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new RecipesRecyclerViewAdapter.onItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Recipe recipe = recipes.get(position);
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_recipeFragment_to_createRecipesFragment);
+            }
+        });
 
         SharedPreferences settings = getActivity().getSharedPreferences("User", getContext().MODE_PRIVATE);
         String token = settings.getString("token", "");

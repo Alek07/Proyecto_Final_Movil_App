@@ -21,6 +21,16 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
     private ArrayList<Recipe> recipes = new ArrayList<>();
     private Context cContext;
 
+    private onItemClickListener rListener;
+
+    public interface onItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener(onItemClickListener listener) {
+        rListener = listener;
+    }
+
     public RecipesRecyclerViewAdapter(Context cContext, ArrayList<Recipe> recipes) {
         this.recipes = recipes;
         this.cContext = cContext;
@@ -31,16 +41,28 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView image;
         TextView name;
         TextView upvotes;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, onItemClickListener listener) {
             super(itemView);
             image = itemView.findViewById(R.id.recipe_image);
             name = itemView.findViewById(R.id.recipe_name);
             upvotes = itemView.findViewById(R.id.recipe_upvotes);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener != null) {
+                        int position = getAdapterPosition();
+                        if(position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -48,7 +70,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
     @Override
     public RecipesRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipes_listview, parent, false);
-        return new RecipesRecyclerViewAdapter.ViewHolder(view);
+        return new RecipesRecyclerViewAdapter.ViewHolder(view, rListener);
     }
 
     @Override
@@ -57,6 +79,7 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
 
         holder.name.setText(recipe.getName());
         holder.upvotes.setText(Integer.toString(recipe.getUpvotes()));
+        holder.image.setImageResource(R.drawable.food);
     }
 
     @Override

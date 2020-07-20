@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     View headerView;
+    ImageView Add;
     private AppBarConfiguration appBarConfiguration;
 
     @Override
@@ -48,8 +50,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.navigationView);
         headerView = navigationView.getHeaderView(0);
 
-        init();
+        Add = findViewById(R.id.add_recipes);
 
+        init();
         userLogged();
 
         findViewById(R.id.menu_icon).setOnClickListener(new View.OnClickListener() {
@@ -59,6 +62,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
+
+        Add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Add.setVisibility(View.GONE);
+                Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment).navigate(R.id.action_recipeFragment_to_createRecipesFragment);
+            }
+        });
     }
 
     //Setup the navigation components with the drawer layout
@@ -98,30 +109,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         .setPopUpTo(R.id.my_nav, true)
                         .build();
 
+                Add.setVisibility(View.GONE);
                 Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.homeFragment, null, navOptions);
 
                 break;
             }
             case R.id.recipeNav: {
 
-                if(isValidDestination(R.id.recipeFragment))
+                if(isValidDestination(R.id.recipeFragment)) {
                     Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.recipeFragment);
-
+                    Add.setVisibility(View.VISIBLE);
+                }
                 break;
             }
             case R.id.favoriteNav: {
 
-                if(isValidDestination(R.id.favoritesFragment))
+                if(isValidDestination(R.id.favoritesFragment)) {
+                    Add.setVisibility(View.GONE);
                     Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.favoritesFragment);
-
+                }
                 break;
             }
             case R.id.profileNav: {
 
-                if(isValidDestination(R.id.profileFragment))
+                if(isValidDestination(R.id.profileFragment)) {
+                    Add.setVisibility(View.GONE);
                     Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.profileFragment);
-
+                }
                 break;
+
             }
             case R.id.logout: {
                 SharedPreferences settings = getSharedPreferences("User", MODE_PRIVATE);

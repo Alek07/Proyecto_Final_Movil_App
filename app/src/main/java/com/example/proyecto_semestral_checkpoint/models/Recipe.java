@@ -1,7 +1,7 @@
 package com.example.proyecto_semestral_checkpoint.models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Recipe {
 
@@ -10,8 +10,28 @@ public class Recipe {
     private int category;
     private String description;
     private String author;
-    private List<HashMap<String, String>> ingredients;
+    private ArrayList<HashMap<String, String>> ingredients;
     private int upvotes;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCategory(int category) {
+        this.category = category;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setIngredients(ArrayList<HashMap<String, String>> ingredients) {
+        this.ingredients = ingredients;
+    }
 
     public String get_id() {
         return _id;
@@ -33,7 +53,7 @@ public class Recipe {
         return author;
     }
 
-    public List<HashMap<String, String>> getIngredients() {
+    public ArrayList<HashMap<String, String>> getIngredients() {
         return ingredients;
     }
 

@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.CreateRecipesFragment"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="15dp"
+        android:background="#fff">
+
+        <TextView
+            android:layout_width="200sp"
+            android:layout_height="wrap_content"
+            android:text="Crear Receta"
+            android:textSize="30sp"
+            android:textColor="#000"
+            android:layout_marginLeft="15dp"
+            />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/createView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginBottom="10dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/food"/>
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:padding="10dp">-->
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:labelFor="@+id/imageUrl"-->
+<!--                    android:text="Image URL"-->
+<!--                    android:textSize="25sp"-->
+<!--                    android:layout_marginTop="15dp"/>-->
+<!--                <EditText-->
+<!--                    android:id="@+id/imageUrl"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="15sp"-->
+<!--                    android:hint="https://images.unsplash.com/photo-1484723091..."-->
+<!--                    android:nextFocusDown="@id/addImage"-->
+<!--                    android:padding="5dp"-->
+<!--                    android:layout_marginBottom="15dp"/>-->
+<!--            </LinearLayout>-->
+
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:gravity="center">-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/addImage"-->
+<!--                    android:layout_width="150dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Agregar imagen"-->
+<!--                    android:textColor="#ffff"-->
+<!--                    android:background="@drawable/custom_button"/>-->
+
+<!--            </LinearLayout>-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/name"
+                    android:textSize="25sp"
+                    android:layout_marginTop="15dp"
+                    android:text="Nombre"/>
+
+                <EditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nextFocusDown="@id/ingredients"
+                    android:hint="Nombre"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/name"
+                    android:textSize="25sp"
+                    android:layout_marginTop="15dp"
+                    android:text="Categoria"/>
+
+                <Spinner
+                    android:id="@+id/category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nextFocusDown="@id/ingredients"
+                    android:spinnerMode="dropdown"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/ingredients"
+                    android:layout_marginTop="15dp"
+                    android:textSize="25sp"
+                    android:text="Ingredientes (max 5)"/>
+
+                <EditText
+                    android:id="@+id/ingredients"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nextFocusDown="@id/description"
+                    android:hint="arroz, agua, sal"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:labelFor="@+id/ingredients"
+                    android:layout_marginTop="15dp"
+                    android:textSize="25sp"
+                    android:text="Descripción"/>
+
+                <EditText
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nextFocusDown="@id/save"
+                    android:hint="Heche el arroz en agua..."
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="25dp">
+
+                <Button
+                    android:id="@+id/save"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:text="crear receta"
+                    android:textColor="#ffff"
+                    android:background="@drawable/custom_button"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

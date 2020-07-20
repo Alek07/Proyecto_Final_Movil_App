@@ -1,4 +1,4 @@
-package com.example.proyecto_semestral_checkpoint;
+package com.example.proyecto_semestral_checkpoint.ui;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.proyecto_semestral_checkpoint.R;
 import com.example.proyecto_semestral_checkpoint.models.User;
 import com.example.proyecto_semestral_checkpoint.network.ApiClient;
 import com.example.proyecto_semestral_checkpoint.network.Recipe_App_API;
