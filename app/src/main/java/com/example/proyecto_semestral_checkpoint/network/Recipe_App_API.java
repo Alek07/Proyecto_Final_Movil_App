@@ -38,6 +38,9 @@ public interface Recipe_App_API {
     @GET("recipes")
     Call<ArrayList<Recipe>> getRecipe(@Header("Authorization") String token);
 
+    @POST("recipes")
+    Call<Recipe> createRecipe(@Header("Authorization") String token, @Body Recipe recipe);
+
     @GET("users/me")
     Call<User> getUser(@Header("Authorization") String token);
 
