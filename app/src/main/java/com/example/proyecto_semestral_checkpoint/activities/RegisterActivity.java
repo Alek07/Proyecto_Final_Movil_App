@@ -1,4 +1,4 @@
-package com.example.proyecto_semestral_checkpoint;
+package com.example.proyecto_semestral_checkpoint.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.proyecto_semestral_checkpoint.R;
 import com.example.proyecto_semestral_checkpoint.models.User;
 import com.example.proyecto_semestral_checkpoint.network.ApiClient;
 import com.example.proyecto_semestral_checkpoint.network.Recipe_App_API;
@@ -49,17 +50,24 @@ public class RegisterActivity extends AppCompatActivity {
                 boolean validPass = !Password.getText().toString().isEmpty();
                 if (!validName) {
                     Name.requestFocus();
-                    Name.setError("El nombre de usuario no puede estar vacío.");
+                    Name.setError("User name can't be empty");
                 }
                 if (!validEmail) {
                     Email.requestFocus();
-                    Email.setError("El email no puede estar vacío.");
+                    Email.setError("Email can't be empty");
                 }
                 if (!validPass) {
                     Password.requestFocus();
-                    Password.setError("El password no puede estar vacío.");
+                    Password.setError("Password can't be empty");
+                } else if(Password.length() < 9) {
+                    validPass = false;
+                    Password.requestFocus();
+                    Password.setError("Password must have more than 9 characters");
                 }
+
+
                 if (validName && validEmail && validPass) {
+                    Register.setEnabled(false);
                     register(Name.getText().toString(), Email.getText().toString(), Password.getText().toString());
                 }
             }
@@ -86,20 +94,21 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (!response.isSuccessful()) {
-                    Toast.makeText(RegisterActivity.this, "Error al registrarse, por favor vuelva a intentarlo", Toast.LENGTH_SHORT).show();
+                    Register.setEnabled(false);
+                    Toast.makeText(RegisterActivity.this, "Registration Error, make sure your data is correct", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                User user = response.body();
-                Log.d("USER", "onResponse: " + user.getName());
+                Register.setEnabled(true);
                 Intent register = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(register);
-                Toast.makeText(RegisterActivity.this, "Usuario Registrado exitosamente !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "User registered successfully !", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-
+                Register.setEnabled(true);
+                Toast.makeText(RegisterActivity.this, "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
             }
         });
     }

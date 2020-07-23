@@ -1,4 +1,4 @@
-package com.example.proyecto_semestral_checkpoint.adapter;
+package com.example.proyecto_semestral_checkpoint.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
