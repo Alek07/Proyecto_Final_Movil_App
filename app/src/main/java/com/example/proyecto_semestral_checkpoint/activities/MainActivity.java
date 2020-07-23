@@ -101,8 +101,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         RequestOptions options = new RequestOptions()
                 .centerCrop()
-                .placeholder(R.mipmap.ic_launcher_round)
-                .error(R.mipmap.ic_launcher_round);
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.placeholder);
 
         Glide.with(this).load(ApiClient.getBaseUrl() + "users/" + user.getId() + "/avatar").apply(options).into(Image);
     }
