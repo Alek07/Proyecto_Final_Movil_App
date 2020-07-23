@@ -1,11 +1,14 @@
 package com.example.proyecto_semestral_checkpoint.ui;
 
+import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavBackStackEntry;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,11 +20,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.proyecto_semestral_checkpoint.R;
 import com.example.proyecto_semestral_checkpoint.models.Recipe;
+import com.example.proyecto_semestral_checkpoint.models.User;
 import com.example.proyecto_semestral_checkpoint.network.ApiClient;
 import com.example.proyecto_semestral_checkpoint.network.Recipe_App_API;
+import com.example.proyecto_semestral_checkpoint.util.DoubleClickListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,11 +45,16 @@ public class ViewRecipeFragment extends Fragment {
     private Recipe_App_API recipe_app_api = ApiClient.getClient().create(Recipe_App_API.class);
     private String[] categories = new String[]{"Soup", "Appetizer", "Salads", "Breads ", "Drinks", "Desserts", "Main Dish", "Side Dish"};
 
-    private TextView Name, Ingredients, Description, Category;
+    private User user;
+
+    private boolean isFavorite = false;
+
+
+    private TextView Name, NameLabel, Ingredients, Description, Category;
     private EditText NameE, IngredientsE, DescriptionE;
-    private ImageView Edit, Cancel;
+    private ImageView RecipeImage, Edit, Cancel, Delete, Favorite;
     private Spinner Categories;
-    private Button Save, Delete;
+    private Button Save;
     private Recipe recipe;
 
     public ViewRecipeFragment() {
@@ -62,6 +73,7 @@ public class ViewRecipeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ViewRecipeFragmentArgs args = ViewRecipeFragmentArgs.fromBundle(getArguments());
         recipe = args.getRecipe();
+        user = args.getUser();
     }
 
     @Override
@@ -70,22 +82,46 @@ public class ViewRecipeFragment extends Fragment {
         initializeControls();
         setRecipeInfo();
         toggleEditMode();
+        add_remove_favorite();
         validateInputs();
+        deleteRecipe();
+
+        SharedPreferences settings = getActivity().getSharedPreferences("User", getContext().MODE_PRIVATE);
+        String author = settings.getString("_id", "null");
+
+        //Enable edit mode for owner
+        if (!recipe.getAuthor().equals(author)) {
+            Edit.setVisibility(View.GONE);
+            Delete.setVisibility(View.GONE);
+        }
+
+        //IsFavorites
+        for(int i = 0; i < user.getFavorites().size(); i++){
+            if(user.getFavorites().get(i).get("recipe").equals(recipe.get_id())) {
+                isFavorite = true;
+                Favorite.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
-    private void initializeControls(){
+    private void initializeControls() {
         Name = getView().findViewById(R.id.name);
         Ingredients = getView().findViewById(R.id.ingredients);
         Description = getView().findViewById(R.id.description);
         Category = getView().findViewById(R.id.category);
+
+        NameLabel = getView().findViewById(R.id.name_edit_label);
 
         NameE = getView().findViewById(R.id.name_edit);
         IngredientsE = getView().findViewById(R.id.ingredients_edit);
         DescriptionE = getView().findViewById(R.id.description_edit);
         Categories = getView().findViewById(R.id.category_edit);
 
+
+        RecipeImage = getView().findViewById(R.id.recipe_image);
         Edit = getView().findViewById(R.id.edit);
         Cancel = getView().findViewById(R.id.cancel);
+        Favorite = getView().findViewById(R.id.favorite);
 
         Save = getView().findViewById(R.id.btnSave);
         Delete = getView().findViewById(R.id.btnDelete);
@@ -102,10 +138,13 @@ public class ViewRecipeFragment extends Fragment {
         Edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Name.setVisibility(View.GONE);
+                Name.setText("Edit Recipe");
+
                 Ingredients.setVisibility(View.GONE);
                 Description.setVisibility(View.GONE);
                 Category.setVisibility(View.GONE);
+
+                NameLabel.setVisibility(View.VISIBLE);
 
                 NameE.setVisibility(View.VISIBLE);
                 IngredientsE.setVisibility(View.VISIBLE);
@@ -116,17 +155,19 @@ public class ViewRecipeFragment extends Fragment {
                 Cancel.setVisibility(View.VISIBLE);
 
                 Save.setVisibility(View.VISIBLE);
-                Delete.setVisibility(View.VISIBLE);
             }
         });
 
         Cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Name.setVisibility(View.VISIBLE);
+                Name.setText(recipe.getName());
+
                 Ingredients.setVisibility(View.VISIBLE);
                 Description.setVisibility(View.VISIBLE);
                 Category.setVisibility(View.VISIBLE);
+
+                NameLabel.setVisibility(View.GONE);
 
                 NameE.setVisibility(View.GONE);
                 IngredientsE.setVisibility(View.GONE);
@@ -137,7 +178,6 @@ public class ViewRecipeFragment extends Fragment {
                 Cancel.setVisibility(View.GONE);
 
                 Save.setVisibility(View.GONE);
-                Delete.setVisibility(View.GONE);
             }
         });
     }
@@ -145,20 +185,20 @@ public class ViewRecipeFragment extends Fragment {
     private void setRecipeInfo() {
         String category = "";
         ArrayList<HashMap<String, String>> lstingredients = recipe.getIngredients();
-        String ingredients ="";
+        String ingredients = "";
 
         //Convert category id to String
-        for(int i = 0; i < categories.length; i++){
-            if(i + 1 == recipe.getCategory())
+        for (int i = 0; i < categories.length; i++) {
+            if (i + 1 == recipe.getCategory())
                 category = categories[i];
         }
 
         //Convert list of ingredients to a String
-        for(int j = 0; j < lstingredients.size(); j++) {
-            if(j + 1 == lstingredients.size())
+        for (int j = 0; j < lstingredients.size(); j++) {
+            if (j + 1 == lstingredients.size())
                 ingredients += lstingredients.get(j).get("ingredient");
             else
-                ingredients += lstingredients.get(j).get("ingredient") + ",";
+                ingredients += lstingredients.get(j).get("ingredient") + ", ";
         }
 
         Name.setText(recipe.getName());
@@ -183,15 +223,15 @@ public class ViewRecipeFragment extends Fragment {
                 ArrayList<HashMap<String, String>> ingredients = new ArrayList<>();
 
                 //Check if their'r empty
-                if(!isValidName) {
+                if (!isValidName) {
                     NameE.requestFocus();
                     NameE.setError("El nombre no puede estar vacío.");
                 }
-                if(!isValidDescription) {
+                if (!isValidDescription) {
                     DescriptionE.requestFocus();
                     DescriptionE.setError("La descripcion no puede estar vacío.");
                 }
-                if(!isValidIngredients) {
+                if (!isValidIngredients) {
                     IngredientsE.requestFocus();
                     IngredientsE.setError("Los ingredientes no puede estar vacío.");
                 } else {
@@ -199,14 +239,14 @@ public class ViewRecipeFragment extends Fragment {
                     //Check ingredients
                     String[] newIngredients = IngredientsE.getText().toString().split(",");
 
-                    if(newIngredients.length > 5) {
+                    if (newIngredients.length > 5) {
                         isValidIngredients = false;
                         IngredientsE.requestFocus();
                         IngredientsE.setError("No puede agregar mas de 5 ingredientes");
                     }
 
                     //Add ingredients on array list
-                    for(int j = 0; j < newIngredients.length; j++) {
+                    for (int j = 0; j < newIngredients.length; j++) {
                         HashMap<String, String> index = new HashMap<>();
                         index.put("ingredient", newIngredients[j]);
                         ingredients.add(index);
@@ -217,15 +257,14 @@ public class ViewRecipeFragment extends Fragment {
 
                 //Convert category
                 int category = 0;
-                for(int i = 0; i < categories.length; i++){
-                    if(Categories.getSelectedItem().equals(categories[i])) {
+                for (int i = 0; i < categories.length; i++) {
+                    if (Categories.getSelectedItem().equals(categories[i])) {
                         category = i + 1;
-                        Log.d("CATEGORY", "onClick: " + category);
                     }
                 }
 
-                if(isValidName && isValidDescription && isValidIngredients) {
-                    Log.d("REQUEST", "onClick: REQUEST CALL INICIALIZE");
+                if (isValidName && isValidDescription && isValidIngredients) {
+                    Save.setEnabled(false);
                     updateRecipeRequest(ingredients, category);
                 }
 
@@ -246,15 +285,14 @@ public class ViewRecipeFragment extends Fragment {
                 ingredients
         );
 
-        Log.d("RECIPE ID TO UPDATE", "updateRecipeRequest: " + new_recipe);
-        Call<Recipe> call = recipe_app_api.updateRecipe(recipe.get_id().toString(),"Bearer " + token, new_recipe);
+        Call<Recipe> call = recipe_app_api.updateRecipe(recipe.get_id().toString(), "Bearer " + token, new_recipe);
 
         call.enqueue(new Callback<Recipe>() {
             @Override
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
-                if(!response.isSuccessful()) {
-                    Log.d("REQUEST NO SUCCESSFUL", "onResponse: " + response.code());
-                    Log.d("RESPONSE BODY", "onResponse: " + response.body());
+                if (!response.isSuccessful()) {
+                    Save.setEnabled(true);
+                    Toast.makeText(getActivity(), "Update error, check your inputs", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -265,7 +303,8 @@ public class ViewRecipeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<Recipe> call, Throwable t) {
-
+                Save.setEnabled(true);
+                Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -274,7 +313,80 @@ public class ViewRecipeFragment extends Fragment {
         Delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences settings = getActivity().getSharedPreferences("User", getContext().MODE_PRIVATE);
+                String token = settings.getString("token", "");
 
+                Call<Recipe> call = recipe_app_api.deleteRecipe(recipe.get_id().toString(), "Bearer " + token);
+
+                call.enqueue(new Callback<Recipe>() {
+                    @Override
+                    public void onResponse(Call<Recipe> call, Response<Recipe> response) {
+                        if (!response.isSuccessful()) {
+                            Toast.makeText(getActivity(), "Something went wrong while deleting the recipe", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.recipeFragment);
+                    }
+
+                    @Override
+                    public void onFailure(Call<Recipe> call, Throwable t) {
+                        Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void add_remove_favorite() {
+        RecipeImage.setOnClickListener(new DoubleClickListener() {
+            @Override
+            public void onDoubleClick() {
+                SharedPreferences settings = getActivity().getSharedPreferences("User", getContext().MODE_PRIVATE);
+                String token = settings.getString("token", "");
+
+                Call<User> add = recipe_app_api.addFavorites(recipe.get_id(), token);
+                Call<User> remove = recipe_app_api.removeFavorites(recipe.get_id(), token);
+
+                if(!isFavorite){
+                    add.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            if (!response.isSuccessful()) {
+                                Toast.makeText(getActivity(), "Ups!, something went wrong", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            user = response.body();
+                            Favorite.setVisibility(View.VISIBLE);
+                            isFavorite = true;
+                        }
+
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
+                } else {
+                    remove.enqueue(new Callback<User>() {
+                        @Override
+                        public void onResponse(Call<User> call, Response<User> response) {
+                            if (!response.isSuccessful()) {
+                                Toast.makeText(getActivity(), "Ups!, something went wrong", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+                            user = response.body();
+                            Favorite.setVisibility(View.GONE);
+                            isFavorite = false;
+                        }
+
+                        @Override
+                        public void onFailure(Call<User> call, Throwable t) {
+                            Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             }
         });
     }
@@ -293,8 +405,8 @@ public class ViewRecipeFragment extends Fragment {
         Edit.setVisibility(View.VISIBLE);
         Cancel.setVisibility(View.GONE);
 
+        Save.setEnabled(true);
         Save.setVisibility(View.GONE);
-        Delete.setVisibility(View.GONE);
 
         onStart();
     }

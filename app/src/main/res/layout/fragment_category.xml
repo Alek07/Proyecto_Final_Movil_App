@@ -21,24 +21,22 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/category_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="76dp"
         android:fontFamily="@font/montserrat_bold"
-        android:text="Your favorites"
+        android:text="Looking by Soup's"
         android:textColor="#000"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.113"
+        app:layout_constraintHorizontal_bias="0.186"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/user_favorites_view"
+        android:id="@+id/category_filter_view"
         android:layout_width="match_parent"
         android:layout_height="500dp"
         android:layout_marginLeft="25dp"

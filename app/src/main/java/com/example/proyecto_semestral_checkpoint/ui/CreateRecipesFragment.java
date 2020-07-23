@@ -13,12 +13,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-import com.example.proyecto_semestral_checkpoint.MainActivity;
 import com.example.proyecto_semestral_checkpoint.R;
 import com.example.proyecto_semestral_checkpoint.models.Recipe;
 import com.example.proyecto_semestral_checkpoint.network.ApiClient;
@@ -26,7 +23,6 @@ import com.example.proyecto_semestral_checkpoint.network.Recipe_App_API;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -87,24 +83,24 @@ public class CreateRecipesFragment extends Fragment {
                 //Check if their'r empty
                 if(!isValidName) {
                     Name.requestFocus();
-                    Name.setError("El nombre no puede estar vacío.");
+                    Name.setError("Recipe Name can't be empty");
                 }
                 if(!isValidDescription) {
                     Description.requestFocus();
-                    Description.setError("La descripcion no puede estar vacío.");
+                    Description.setError("Description can't be empty");
                 }
                 if(!isValidIngredients) {
                     Ingredients.requestFocus();
-                    Ingredients.setError("Los ingredientes no puede estar vacío.");
+                    Ingredients.setError("Ingredients can't be empty");
                 } else {
 
                     //Check ingredients
                     String[] newIngredients = Ingredients.getText().toString().split(",");
 
-                    if(newIngredients.length > 5) {
+                    if(newIngredients.length > 6) {
                         isValidIngredients = false;
                         Ingredients.requestFocus();
-                        Ingredients.setError("No puede agregar mas de 5 ingredientes");
+                        Ingredients.setError("You can't add more than 6 ingredients");
                     }
 
                     //Add ingredients on array list
@@ -113,8 +109,6 @@ public class CreateRecipesFragment extends Fragment {
                         index.put("ingredient", newIngredients[j]);
                         ingredients.add(index);
                     }
-
-                    Log.d("INGREDIENTS", "onClick: " + ingredients);
                 }
 
                 //Convert category
@@ -122,12 +116,11 @@ public class CreateRecipesFragment extends Fragment {
                 for(int i = 0; i < categories.length; i++){
                     if(Categories.getSelectedItem().equals(categories[i])) {
                         category = i + 1;
-                        Log.d("CATEGORY", "onClick: " + category);
                     }
                 }
 
                 if(isValidName && isValidDescription && isValidIngredients) {
-                    Log.d("REQUEST", "onClick: REQUEST CALL INICIALIZE");
+                    Save.setEnabled(false);
                     createRecipesRequest(ingredients, category);
                 }
 
@@ -154,19 +147,21 @@ public class CreateRecipesFragment extends Fragment {
             @Override
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                 if(!response.isSuccessful()) {
-                    Log.d("REQUEST NO SUCCESSFUL", "onResponse: " + response.body());
+                    Save.setEnabled(true);
+                    Toast.makeText(getActivity(), "Error while creating recipe, make sure your data is correct", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 Recipe new_recipe = response.body();
-                Log.d("NEW RECIPE   ", "onResponse: " + new_recipe);
                 if(new_recipe != null)
+                    Save.setEnabled(true);
                     Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_createRecipesFragment_to_recipeFragment);
             }
 
             @Override
             public void onFailure(Call<Recipe> call, Throwable t) {
-                Log.d("RECIPE ERROR", "onFailure: " + t);
+                Save.setEnabled(true);
+                Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
             }
         });
     }
