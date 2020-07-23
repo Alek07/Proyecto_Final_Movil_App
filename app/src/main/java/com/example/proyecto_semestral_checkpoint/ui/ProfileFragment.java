@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -18,18 +19,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.proyecto_semestral_checkpoint.R;
+import com.example.proyecto_semestral_checkpoint.activities.LoginActivity;
+import com.example.proyecto_semestral_checkpoint.activities.MainActivity;
 import com.example.proyecto_semestral_checkpoint.models.User;
 import com.example.proyecto_semestral_checkpoint.network.ApiClient;
 import com.example.proyecto_semestral_checkpoint.network.Recipe_App_API;
+import com.google.android.material.navigation.NavigationView;
 
 import java.io.File;
 
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -52,11 +55,22 @@ public class ProfileFragment extends Fragment {
     private ImageView ImageT, ImageE,  Edit, Cancel;
     private Button Add, Save;
     private User user;
+    private View headerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        user = (User) getArguments().getSerializable("user");
+
+        NavigationView navigationView = getActivity().findViewById(R.id.navigationView);
+        headerView = navigationView.getHeaderView(0);
     }
 
     @Override
@@ -97,24 +111,19 @@ public class ProfileFragment extends Fragment {
 
     private void setUserProfile() {
 
-        SharedPreferences settings = getActivity().getSharedPreferences("User", getContext().MODE_PRIVATE);
-        String userName = settings.getString("user_name", "User Name");
-        String email = settings.getString("email", "User Name");
-        String id = settings.getString("_id", "no id");
+        UserNameT.setText(user.getName());
+        UserNameE.setText(user.getName());
 
-        UserNameT.setText(userName);
-        UserNameE.setText(userName);
-
-        EmailT.setText(email);
-        EmailE.setText(email);
+        EmailT.setText(user.getEmail());
+        EmailE.setText(user.getEmail());
 
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .placeholder(R.mipmap.ic_launcher_round)
                 .error(R.mipmap.ic_launcher_round);
 
-        Glide.with(this).load(ApiClient.getBaseUrl() + "users/" + id + "/avatar").apply(options).into(ImageT);
-        Glide.with(this).load(ApiClient.getBaseUrl() + "users/" + id + "/avatar").apply(options).into(ImageE);
+        Glide.with(this).load(ApiClient.getBaseUrl() + "users/" + user.getId() + "/avatar").apply(options).into(ImageT);
+        Glide.with(this).load(ApiClient.getBaseUrl() + "users/" + user.getId() + "/avatar").apply(options).into(ImageE);
     }
 
     private void toggleEditMode() {
@@ -181,44 +190,33 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            imageData = data.getData();
-        }
-    }
-
     private void updateUserInfo() {
         Save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 boolean isValidName = !UserNameE.getText().toString().isEmpty();
                 boolean isValidEmail = !EmailE.getText().toString().isEmpty();
-                boolean isValidPass = !PasswordE.getText().toString().isEmpty();
 
                 if(!isValidName) {
                     UserNameE.requestFocus();
-                    UserNameE.setError("El nombre no puede estar vacío.");
+                    UserNameE.setError("User name can't be empty");
                 }
                 if(!isValidEmail) {
                     EmailE.requestFocus();
-                    EmailE.setError("El email no puede estar vacío.");
-                }
-                if(!isValidPass) {
-                    PasswordE.requestFocus();
-                    PasswordE.setError("El password no puede estar vacío.");
+                    EmailE.setError("Email can't be empty");
                 }
 
-                if(isValidName && isValidEmail && isValidPass) {
+                if(isValidName && isValidEmail) {
                     SharedPreferences settings = getActivity().getSharedPreferences("User", getContext().MODE_PRIVATE);
                     String token = settings.getString("token", "");
+
+                    Save.setEnabled(false);
 
                     User update = new User();
                     update.setName(UserNameE.getText().toString());
                     update.setEmail(EmailE.getText().toString());
 
-                    if(!PasswordE.getText().toString().equals("Password"))
+                    if(!PasswordE.getText().toString().equals("Password") && PasswordE.length() > 9 && !PasswordE.toString().isEmpty())
                         update.setPassword(PasswordE.getText().toString());
 
                     try {
@@ -228,34 +226,75 @@ public class ProfileFragment extends Fragment {
                             @Override
                             public void onResponse(Call<User> call, Response<User> response) {
                                 if(!response.isSuccessful()) {
+                                    Toast.makeText(getActivity(), "Update error, check your inputs", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 
                                 user = response.body();
-                                SharedPreferences.Editor edit = settings.edit();
-                                edit.putString("user_name", user.getName());
-                                edit.putString("email", user.getEmail());
-                                edit.apply();
 
                                 if(imageData != null)
                                     uploadImage(token);
                                 else
-                                    getActivity().recreate();
+                                    refresh();
 
-                                Log.d("USER INFO UPDATE", "onResponse: ");
                             }
 
                             @Override
                             public void onFailure(Call<User> call, Throwable t) {
-
+                                refresh();
+                                Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
                             }
                         });
                     } catch (Exception e) {
-                        Log.d("EXCEPTION", "onClick: " + e);
                     }
                 }
             }
         });
+    }
+
+    private void refresh() {
+
+        //Exit edit mode
+        ImageT.setVisibility(View.VISIBLE);
+        ImageE.setVisibility(View.GONE);
+
+        UserNameT.setVisibility(View.VISIBLE);
+        UserNameE.setVisibility(View.GONE);
+
+        EmailT.setVisibility(View.VISIBLE);
+        EmailE.setVisibility(View.GONE);
+
+        PasswordT.setVisibility(View.VISIBLE);
+        PasswordE.setVisibility(View.GONE);
+
+        //Add.setVisibility(View.GONE);
+        Save.setEnabled(true);
+        Save.setVisibility(View.GONE);
+
+        Cancel.setVisibility(View.GONE);
+        Edit.setVisibility(View.VISIBLE);
+
+        imageData = null;
+
+        //Refresh Nav Header User info
+        TextView User_name =  headerView.findViewById(R.id.user_name);
+        TextView Email =  headerView.findViewById(R.id.email);
+        ImageView Image =  headerView.findViewById(R.id.profile_image);
+
+
+        User_name.setText(user.getName());
+        Email.setText(user.getEmail());
+
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.mipmap.ic_launcher_round)
+                .error(R.mipmap.ic_launcher_round);
+
+        Glide.with(this).load(ApiClient.getBaseUrl() + "users/" + user.getId() + "/avatar").apply(options).into(Image);
+
+        //Restart Fragment
+        onStart();
+
     }
 
     private void uploadImage(String token) {
@@ -285,4 +324,15 @@ public class ProfileFragment extends Fragment {
             Log.d("EXCEPTION", "uploadImage: " + e);
         }
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            imageData = data.getData();
+        }
+    }
+
 }
+
+

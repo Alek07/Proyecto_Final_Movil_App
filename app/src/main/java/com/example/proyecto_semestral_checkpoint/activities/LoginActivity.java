@@ -1,9 +1,8 @@
-package com.example.proyecto_semestral_checkpoint;
+package com.example.proyecto_semestral_checkpoint.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,10 +12,12 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.proyecto_semestral_checkpoint.R;
 import com.example.proyecto_semestral_checkpoint.models.Log_In_User;
 import com.example.proyecto_semestral_checkpoint.models.User;
 import com.example.proyecto_semestral_checkpoint.network.ApiClient;
 import com.example.proyecto_semestral_checkpoint.network.Recipe_App_API;
+import com.example.proyecto_semestral_checkpoint.util.LoadingDialog;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText Email, Password;
     TextView Register;
     Button Login;
+
+    LoadingDialog loadingDialog = new LoadingDialog(LoginActivity.this);
 
 
     @Override
@@ -49,13 +52,14 @@ public class LoginActivity extends AppCompatActivity {
                 boolean validPass = !Password.getText().toString().isEmpty();
                 if(!validEmail) {
                     Email.requestFocus();
-                    Email.setError("El email no puede estar vacío.");
+                    Email.setError("Email can't be empty");
                 }
                 if(!validPass) {
                     Password.requestFocus();
-                    Password.setError("El password no puede estar vacío.");
+                    Password.setError("Password can't be empty");
                 }
                 if (validEmail && validPass){
+                    loadingDialog.startLoading();
                     login(Email.getText().toString(), Password.getText().toString());
                 }
             }
@@ -81,27 +85,35 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Log_In_User> call, Response<Log_In_User> response) {
                 if(!response.isSuccessful()) {
-                    Toast.makeText(LoginActivity.this, "Combinacion de Usuario y Contraseña no coinciden", Toast.LENGTH_SHORT).show();
+                    loadingDialog.dismissDialog();
+                    Toast.makeText(LoginActivity.this, "Email or Password are incorrect", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Log_In_User user = response.body();
+                Log_In_User log_in_info = response.body();
 
-                SharedPreferences settings = LoginActivity.this.getSharedPreferences("User", MODE_PRIVATE);
-                SharedPreferences.Editor edit = settings.edit();
-                edit.putString("_id", user.getUser().getId());
-                edit.putString("token", user.getToken());
-                edit.putString("user_name", user.getUser().getName());
-                edit.putString("email", user.getUser().getEmail());
-                edit.apply();
+                if(log_in_info != null) {
+                    User user = log_in_info.getUser();
 
-                Intent main = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(main);
+                    SharedPreferences settings = LoginActivity.this.getSharedPreferences("User", MODE_PRIVATE);
+                    SharedPreferences.Editor edit = settings.edit();
+                    edit.putString("_id", user.getId());
+                    edit.putString("token", log_in_info.getToken());
+                    edit.putBoolean("isLogged", true);
+                    edit.apply();
+
+                    Intent main = new Intent(LoginActivity.this, MainActivity.class);
+                    main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    main.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    loadingDialog.dismissDialog();
+                    startActivity(main);
+                }
             }
 
             @Override
             public void onFailure(Call<Log_In_User> call, Throwable t) {
-
+                loadingDialog.dismissDialog();
+                Toast.makeText(LoginActivity.this, "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
             }
         });
     }

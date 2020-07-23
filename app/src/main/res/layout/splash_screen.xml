@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#fff">
+
+    <TextView
+        android:id="@+id/brand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10sp"
+        android:fontFamily="@font/montserrat_bold"
+        android:paddingBottom="20dp"
+        android:text="Yummy HUB"
+        android:textAlignment="center"
+        android:textSize="35dp"
+        android:textColor="#ffa733"
+        android:layout_centerInParent="true"/>
+
+    <ImageView
+        android:layout_width="800dp"
+        android:layout_height="80dp"
+        android:layout_alignTop="@+id/brand"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="-79dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/ic_restaurant_menu_black_24dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="31dp"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="Created By Checkpoint"
+        android:textAlignment="center"
+        android:textColor="#ffa733"
+        android:textSize="10dp"
+        android:textStyle="bold" />
+
+</RelativeLayout>
