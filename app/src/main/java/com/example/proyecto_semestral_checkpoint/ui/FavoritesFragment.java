@@ -86,7 +86,7 @@ public class FavoritesFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 Recipe recipe = recipes.get(position);
-                FavoritesFragmentDirections.ActionFavoritesFragmentToViewRecipeFragment action = FavoritesFragmentDirections.actionFavoritesFragmentToViewRecipeFragment(recipe, user);
+                FavoritesFragmentDirections.ActionFavoritesFragmentToViewRecipeFragment action = FavoritesFragmentDirections.actionFavoritesFragmentToViewRecipeFragment(user, recipe);
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(action);
             }
         });

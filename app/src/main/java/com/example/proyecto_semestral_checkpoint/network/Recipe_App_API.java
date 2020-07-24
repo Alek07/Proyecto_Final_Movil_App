@@ -1,8 +1,5 @@
 package com.example.proyecto_semestral_checkpoint.network;
 
-import android.content.Intent;
-import android.net.Uri;
-
 import com.example.proyecto_semestral_checkpoint.models.Log_In_User;
 import com.example.proyecto_semestral_checkpoint.models.Recipe;
 import com.example.proyecto_semestral_checkpoint.models.User;
@@ -10,7 +7,6 @@ import com.example.proyecto_semestral_checkpoint.models.User;
 import java.io.File;
 import java.util.ArrayList;
 
-import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;

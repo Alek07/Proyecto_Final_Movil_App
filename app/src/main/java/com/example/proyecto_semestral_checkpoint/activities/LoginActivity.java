@@ -25,11 +25,11 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText Email, Password;
-    TextView Register;
-    Button Login;
+    private EditText Email, Password;
+    private TextView Register;
+    private Button Login;
 
-    LoadingDialog loadingDialog = new LoadingDialog(LoginActivity.this);
+    private LoadingDialog loadingDialog = new LoadingDialog(LoginActivity.this);
 
 
     @Override

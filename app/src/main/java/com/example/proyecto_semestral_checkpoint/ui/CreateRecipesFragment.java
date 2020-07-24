@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -138,7 +137,8 @@ public class CreateRecipesFragment extends Fragment {
                 category,
                 Description.getText().toString(),
                 author,
-                ingredients
+                ingredients,
+                null
         );
 
         Call<Recipe> call = recipe_app_api.createRecipe("Bearer " + token, recipe);

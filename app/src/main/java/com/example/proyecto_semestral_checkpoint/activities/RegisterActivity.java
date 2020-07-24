@@ -16,6 +16,7 @@ import com.example.proyecto_semestral_checkpoint.R;
 import com.example.proyecto_semestral_checkpoint.models.User;
 import com.example.proyecto_semestral_checkpoint.network.ApiClient;
 import com.example.proyecto_semestral_checkpoint.network.Recipe_App_API;
+import com.example.proyecto_semestral_checkpoint.util.LoadingDialog;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,9 +24,12 @@ import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText Name, Email, Password;
-    Button Register;
-    TextView Login;
+    private EditText Name, Email, Password;
+    private Button Register;
+    private TextView Login;
+
+    private LoadingDialog loadingDialog = new LoadingDialog(RegisterActivity.this);
+
 
 
     @Override
@@ -68,6 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 if (validName && validEmail && validPass) {
                     Register.setEnabled(false);
+                    loadingDialog.startLoading();
                     register(Name.getText().toString(), Email.getText().toString(), Password.getText().toString());
                 }
             }
@@ -94,12 +99,14 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (!response.isSuccessful()) {
-                    Register.setEnabled(false);
+                    Register.setEnabled(true);
+                    loadingDialog.dismissDialog();
                     Toast.makeText(RegisterActivity.this, "Registration Error, make sure your data is correct", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 Register.setEnabled(true);
+                loadingDialog.dismissDialog();
                 Intent register = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(register);
                 Toast.makeText(RegisterActivity.this, "User registered successfully !", Toast.LENGTH_SHORT).show();
@@ -108,6 +115,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Register.setEnabled(true);
+                loadingDialog.dismissDialog();
                 Toast.makeText(RegisterActivity.this, "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
             }
         });

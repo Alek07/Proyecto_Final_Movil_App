@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.proyecto_semestral_checkpoint.R;
@@ -94,7 +93,7 @@ public class RecipeFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 Recipe recipe = recipes.get(position);
-                RecipeFragmentDirections.ActionRecipeFragmentToViewRecipeFragment action = RecipeFragmentDirections.actionRecipeFragmentToViewRecipeFragment(recipe, user);
+                RecipeFragmentDirections.ActionRecipeFragmentToViewRecipeFragment action = RecipeFragmentDirections.actionRecipeFragmentToViewRecipeFragment(user, recipe);
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(action);
             }
         });

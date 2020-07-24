@@ -109,7 +109,7 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onItemClick(int position) {
                 Recipe recipe = recipes.get(position);
-                CategoryFragmentDirections.ActionCategoryFragmentToViewRecipeFragment action = CategoryFragmentDirections.actionCategoryFragmentToViewRecipeFragment(recipe, user);
+                CategoryFragmentDirections.ActionCategoryFragmentToViewRecipeFragment action = CategoryFragmentDirections.actionCategoryFragmentToViewRecipeFragment(user, recipe);
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(action);
             }
         });

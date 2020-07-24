@@ -95,11 +95,12 @@
             android:id="@+id/action_viewRecipeFragment_to_recipeFragment"
             app:destination="@id/recipeFragment" />
         <argument
-            android:name="recipe"
-            app:argType="com.example.proyecto_semestral_checkpoint.models.Recipe" />
-        <argument
             android:name="user"
             app:argType="com.example.proyecto_semestral_checkpoint.models.User"
+            app:nullable="true" />
+        <argument
+            android:name="recipe"
+            app:argType="com.example.proyecto_semestral_checkpoint.models.Recipe"
             app:nullable="true" />
     </fragment>
     <fragment

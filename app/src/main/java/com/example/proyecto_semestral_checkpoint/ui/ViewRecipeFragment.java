@@ -1,13 +1,11 @@
 package com.example.proyecto_semestral_checkpoint.ui;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavBackStackEntry;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
@@ -22,6 +20,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.proyecto_semestral_checkpoint.R;
 import com.example.proyecto_semestral_checkpoint.models.Recipe;
 import com.example.proyecto_semestral_checkpoint.models.User;
@@ -198,8 +198,15 @@ public class ViewRecipeFragment extends Fragment {
             if (j + 1 == lstingredients.size())
                 ingredients += lstingredients.get(j).get("ingredient");
             else
-                ingredients += lstingredients.get(j).get("ingredient") + ", ";
+                ingredients += lstingredients.get(j).get("ingredient") + "\n";
         }
+
+        RequestOptions options = new RequestOptions()
+                .centerCrop()
+                .placeholder(R.drawable.food)
+                .error(R.drawable.food);
+
+        Glide.with(getContext()).load(ApiClient.getBaseUrl() + "recipes/" + recipe.get_id() + "/images/" + recipe.getImages().get(0).get("_id")).apply(options).into(RecipeImage);
 
         Name.setText(recipe.getName());
         Ingredients.setText(ingredients);
@@ -282,7 +289,8 @@ public class ViewRecipeFragment extends Fragment {
                 category,
                 DescriptionE.getText().toString(),
                 null,
-                ingredients
+                ingredients,
+                null
         );
 
         Call<Recipe> call = recipe_app_api.updateRecipe(recipe.get_id().toString(), "Bearer " + token, new_recipe);

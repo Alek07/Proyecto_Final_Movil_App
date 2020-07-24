@@ -10,10 +10,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.proyecto_semestral_checkpoint.R;
 import com.example.proyecto_semestral_checkpoint.models.Recipe;
+import com.example.proyecto_semestral_checkpoint.network.ApiClient;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecyclerViewAdapter.ViewHolder> {
 
@@ -79,7 +83,17 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
 
         holder.name.setText(recipe.getName());
         holder.upvotes.setText(Integer.toString(recipe.getUpvotes()));
-        holder.image.setImageResource(R.drawable.food);
+
+        ArrayList<HashMap<String, ?>> images = recipe.getImages();
+
+        if(images.size() > 0) {
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .placeholder(R.drawable.food)
+                    .error(R.drawable.food);
+
+            Glide.with(cContext).load(ApiClient.getBaseUrl() + "recipes/" + recipe.get_id() + "/images/" + recipe.getImages().get(0).get("_id")).apply(options).into(holder.image);
+        }
     }
 
     @Override

@@ -1,12 +1,10 @@
 package com.example.proyecto_semestral_checkpoint.models;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Recipe implements Parcelable {
+public class Recipe implements Serializable {
 
     private String _id;
     private String name;
@@ -14,35 +12,16 @@ public class Recipe implements Parcelable {
     private String description;
     private String author;
     private ArrayList<HashMap<String, String>> ingredients;
+    private ArrayList<HashMap<String, ?>> images;
     private int upvotes;
 
-    public Recipe(Parcel in) {
-        _id = in.readString();
-        name = in.readString();
-        category = in.readInt();
-        description = in.readString();
-        author = in.readString();
-        upvotes = in.readInt();
-    }
-
-    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
-        @Override
-        public Recipe createFromParcel(Parcel in) {
-            return new Recipe(in);
-        }
-
-        @Override
-        public Recipe[] newArray(int size) {
-            return new Recipe[size];
-        }
-    };
-
-    public Recipe(String name, int category, String description, String author, ArrayList<HashMap<String, String>> ingredients) {
+    public Recipe(String name, int category, String description, String author, ArrayList<HashMap<String, String>> ingredients, ArrayList<HashMap<String, ?>> images) {
         this.name = name;
         this.category = category;
         this.description = description;
         this.author = author;
         this.ingredients = ingredients;
+        this.images = images;
     }
 
     public void setName(String name) {
@@ -63,6 +42,10 @@ public class Recipe implements Parcelable {
 
     public void setIngredients(ArrayList<HashMap<String, String>> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public void setImages(ArrayList<HashMap<String, ?>> images) {
+        this.images = images;
     }
 
     public String get_id() {
@@ -89,22 +72,11 @@ public class Recipe implements Parcelable {
         return ingredients;
     }
 
+    public ArrayList<HashMap<String, ?>> getImages() {
+        return images;
+    }
+
     public int getUpvotes() {
         return upvotes;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(_id);
-        dest.writeString(name);
-        dest.writeInt(category);
-        dest.writeString(description);
-        dest.writeString(author);
-        dest.writeInt(upvotes);
     }
 }

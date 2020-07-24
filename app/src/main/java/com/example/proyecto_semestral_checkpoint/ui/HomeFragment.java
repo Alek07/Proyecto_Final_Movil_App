@@ -24,7 +24,6 @@ import com.example.proyecto_semestral_checkpoint.models.User;
 import com.example.proyecto_semestral_checkpoint.network.ApiClient;
 import com.example.proyecto_semestral_checkpoint.network.Recipe_App_API;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import retrofit2.Call;
@@ -143,7 +142,7 @@ public class HomeFragment extends Fragment {
             public void onItemClick(int position) {
                 try {
                     Recipe recipe = recipes.get(position);
-                    HomeFragmentDirections.ActionHomeFragmentToViewRecipeFragment action = HomeFragmentDirections.actionHomeFragmentToViewRecipeFragment(recipe, user);
+                    HomeFragmentDirections.ActionHomeFragmentToViewRecipeFragment action = HomeFragmentDirections.actionHomeFragmentToViewRecipeFragment(user, recipe);
                     Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(action);
                 } catch(Exception e) {
                     Log.d("EDIT RECIPE SCREEN", "onItemClick: " + e);
