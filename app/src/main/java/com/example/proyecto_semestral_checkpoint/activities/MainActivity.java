@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if(!response.isSuccessful()) {
-                    Toast.makeText(MainActivity.this, "Something went fetching user info", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Algo salio mal al buscar la información de usuario", Toast.LENGTH_SHORT).show();
                     Intent logout = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(logout);
                     return;
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Hubo un error al comunicarse con el servidor", Toast.LENGTH_SHORT).show();
             }
         });
     }

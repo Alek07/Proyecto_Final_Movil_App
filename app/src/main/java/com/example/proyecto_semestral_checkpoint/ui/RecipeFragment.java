@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.proyecto_semestral_checkpoint.R;
@@ -39,6 +40,9 @@ public class RecipeFragment extends Fragment {
     private User user;
     private ArrayList<Recipe> recipes = new ArrayList<>();
 
+    private ProgressBar progressBar;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -63,7 +67,7 @@ public class RecipeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Hubo un error al comunicarse con el servidor", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -72,6 +76,9 @@ public class RecipeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         initRecipes_With_RecyclerView();
+
+        progressBar = getView().findViewById(R.id.loading_list);
+
 
         getView().findViewById(R.id.create_recipe).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,18 +114,20 @@ public class RecipeFragment extends Fragment {
             @Override
             public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
                 if(!response.isSuccessful()) {
-                    Toast.makeText(getActivity(), "Error while fetching list, please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Error al cargar la lista, intentelo nuevamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 recipes = response.body();
                 adapter.setRecipesList(recipes);
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
 
             }
 
             @Override
             public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
-                Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Hubo un error al comunicarse con el servidor", Toast.LENGTH_SHORT).show();
             }
         });
     }

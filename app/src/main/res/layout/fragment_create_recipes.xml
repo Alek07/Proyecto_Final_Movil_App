@@ -44,7 +44,7 @@
                     android:layout_marginTop="30dp"
                     android:labelFor="@+id/name"
                     android:layout_marginLeft="20dp"
-                    android:text="Recipe Name"
+                    android:text="Nombre de la receta"
                     android:textSize="24sp" />
 
                 <EditText
@@ -54,7 +54,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
                     android:singleLine="true"
-                    android:hint="Recipe name"
+                    android:hint="Nombre"
                     android:nextFocusDown="@id/category" />
 
                 <TextView
@@ -63,7 +63,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="20dp"
                     android:labelFor="@+id/name"
-                    android:text="Category"
+                    android:text="Categoría"
                     android:textSize="25sp" />
 
                 <Spinner
@@ -81,7 +81,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="20dp"
                     android:labelFor="@+id/ingredients"
-                    android:text="Ingredients (max 5)"
+                    android:text="Ingredientes (max 6)"
                     android:textSize="25sp" />
 
                 <EditText
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:hint="Rice, Chicken, Beans"
+                    android:hint="seprar por comas e.g Arroz, Pollo, Carne"
                     android:nextFocusDown="@id/description" />
 
                 <TextView
@@ -99,7 +99,7 @@
                     android:layout_marginTop="15dp"
                     android:layout_marginLeft="20dp"
                     android:labelFor="@+id/ingredients"
-                    android:text="Instructions"
+                    android:text="Instrucciones"
                     android:textSize="25sp" />
 
                 <EditText
@@ -108,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:hint="How to prepare the recipe"
+                    android:hint="Como prepara la receta"
                     android:nextFocusDown="@id/save" />
 
 
@@ -120,7 +120,7 @@
                     android:layout_marginTop="30dp"
                     android:layout_marginBottom="25dp"
                     android:background="@drawable/custom_button"
-                    android:text="Create Recipe"
+                    android:text="Crear Receta"
                     android:textColor="#ffff" />
 
         </LinearLayout>
@@ -143,7 +143,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="56dp"
             android:fontFamily="@font/montserrat_bold"
-            android:text="New Recipe"
+            android:text="Nueva Receta"
             android:textColor="#000"
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"

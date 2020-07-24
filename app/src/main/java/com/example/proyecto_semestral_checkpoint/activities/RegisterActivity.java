@@ -54,19 +54,19 @@ public class RegisterActivity extends AppCompatActivity {
                 boolean validPass = !Password.getText().toString().isEmpty();
                 if (!validName) {
                     Name.requestFocus();
-                    Name.setError("User name can't be empty");
+                    Name.setError("El nombre de usuario no puede estar vacio");
                 }
                 if (!validEmail) {
                     Email.requestFocus();
-                    Email.setError("Email can't be empty");
+                    Email.setError("El correo no puede estar vacio");
                 }
                 if (!validPass) {
                     Password.requestFocus();
-                    Password.setError("Password can't be empty");
+                    Password.setError("La contraseña no puede estar vacia");
                 } else if(Password.length() < 9) {
                     validPass = false;
                     Password.requestFocus();
-                    Password.setError("Password must have more than 9 characters");
+                    Password.setError("La contraseña debe tener mas de 9 caracteres");
                 }
 
 
@@ -101,7 +101,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (!response.isSuccessful()) {
                     Register.setEnabled(true);
                     loadingDialog.dismissDialog();
-                    Toast.makeText(RegisterActivity.this, "Registration Error, make sure your data is correct", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, "Error de registro, Porfavor verifica los campos nuevamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -109,14 +109,14 @@ public class RegisterActivity extends AppCompatActivity {
                 loadingDialog.dismissDialog();
                 Intent register = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(register);
-                Toast.makeText(RegisterActivity.this, "User registered successfully !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "Usuario registrado satisfactoriamente", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
                 Register.setEnabled(true);
                 loadingDialog.dismissDialog();
-                Toast.makeText(RegisterActivity.this, "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "Hubo un error al comunicarse con el servidor", Toast.LENGTH_SHORT).show();
             }
         });
     }

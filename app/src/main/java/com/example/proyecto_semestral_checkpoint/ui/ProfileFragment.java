@@ -199,11 +199,11 @@ public class ProfileFragment extends Fragment {
 
                 if(!isValidName) {
                     UserNameE.requestFocus();
-                    UserNameE.setError("User name can't be empty");
+                    UserNameE.setError("La contraseña no puede estar vacia");
                 }
                 if(!isValidEmail) {
                     EmailE.requestFocus();
-                    EmailE.setError("Email can't be empty");
+                    EmailE.setError("El correo no puede estar vacio");
                 }
 
                 if(isValidName && isValidEmail) {
@@ -226,7 +226,7 @@ public class ProfileFragment extends Fragment {
                             @Override
                             public void onResponse(Call<User> call, Response<User> response) {
                                 if(!response.isSuccessful()) {
-                                    Toast.makeText(getActivity(), "Update error, check your inputs", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getActivity(), "Error al actualizar datos, verifique los datos nuevamente", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 
@@ -242,7 +242,7 @@ public class ProfileFragment extends Fragment {
                             @Override
                             public void onFailure(Call<User> call, Throwable t) {
                                 refresh();
-                                Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Hubo un error al comunicarse con el servidor", Toast.LENGTH_SHORT).show();
                             }
                         });
                     } catch (Exception e) {

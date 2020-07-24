@@ -52,11 +52,11 @@ public class LoginActivity extends AppCompatActivity {
                 boolean validPass = !Password.getText().toString().isEmpty();
                 if(!validEmail) {
                     Email.requestFocus();
-                    Email.setError("Email can't be empty");
+                    Email.setError("El correo no puede estar vacio");
                 }
                 if(!validPass) {
                     Password.requestFocus();
-                    Password.setError("Password can't be empty");
+                    Password.setError("La contraseña no puede estar vacia");
                 }
                 if (validEmail && validPass){
                     loadingDialog.startLoading();
@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<Log_In_User> call, Response<Log_In_User> response) {
                 if(!response.isSuccessful()) {
                     loadingDialog.dismissDialog();
-                    Toast.makeText(LoginActivity.this, "Email or Password are incorrect", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Correo o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -113,7 +113,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Log_In_User> call, Throwable t) {
                 loadingDialog.dismissDialog();
-                Toast.makeText(LoginActivity.this, "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Hubo un error al comunicarse con el servidor", Toast.LENGTH_SHORT).show();
             }
         });
     }

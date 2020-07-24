@@ -43,7 +43,7 @@ import retrofit2.Response;
 public class ViewRecipeFragment extends Fragment {
 
     private Recipe_App_API recipe_app_api = ApiClient.getClient().create(Recipe_App_API.class);
-    private String[] categories = new String[]{"Soup", "Appetizer", "Salads", "Breads ", "Drinks", "Desserts", "Main Dish", "Side Dish"};
+    private String[] categories = new String[]{"Sopas", "Aperitivos", "Ensaladas", "Panes ", "Bebidas", "Postres", "Entradas", "Guarniciones"};
 
     private User user;
 
@@ -198,15 +198,17 @@ public class ViewRecipeFragment extends Fragment {
             if (j + 1 == lstingredients.size())
                 ingredients += lstingredients.get(j).get("ingredient");
             else
-                ingredients += lstingredients.get(j).get("ingredient") + "\n";
+                ingredients += lstingredients.get(j).get("ingredient") + ",\n";
         }
 
-        RequestOptions options = new RequestOptions()
-                .centerCrop()
-                .placeholder(R.drawable.food)
-                .error(R.drawable.food);
+        if(recipe.getImages().size() > 0) {
+            RequestOptions options = new RequestOptions()
+                    .centerCrop()
+                    .placeholder(R.drawable.food)
+                    .error(R.drawable.food);
 
-        Glide.with(getContext()).load(ApiClient.getBaseUrl() + "recipes/" + recipe.get_id() + "/images/" + recipe.getImages().get(0).get("_id")).apply(options).into(RecipeImage);
+            Glide.with(getContext()).load(ApiClient.getBaseUrl() + "recipes/" + recipe.get_id() + "/images/" + recipe.getImages().get(0).get("_id")).apply(options).into(RecipeImage);
+        }
 
         Name.setText(recipe.getName());
         Ingredients.setText(ingredients);
@@ -236,11 +238,11 @@ public class ViewRecipeFragment extends Fragment {
                 }
                 if (!isValidDescription) {
                     DescriptionE.requestFocus();
-                    DescriptionE.setError("La descripcion no puede estar vacío.");
+                    DescriptionE.setError("Las instrucciones no pueden estar vacío.");
                 }
                 if (!isValidIngredients) {
                     IngredientsE.requestFocus();
-                    IngredientsE.setError("Los ingredientes no puede estar vacío.");
+                    IngredientsE.setError("Los ingredientes no pueden estar vacío.");
                 } else {
 
                     //Check ingredients
@@ -249,7 +251,7 @@ public class ViewRecipeFragment extends Fragment {
                     if (newIngredients.length > 5) {
                         isValidIngredients = false;
                         IngredientsE.requestFocus();
-                        IngredientsE.setError("No puede agregar mas de 5 ingredientes");
+                        IngredientsE.setError("No puedes agregar mas de 6 ingredientes");
                     }
 
                     //Add ingredients on array list
@@ -300,7 +302,7 @@ public class ViewRecipeFragment extends Fragment {
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                 if (!response.isSuccessful()) {
                     Save.setEnabled(true);
-                    Toast.makeText(getActivity(), "Update error, check your inputs", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Error al actualizar datos, verifique los datos nuevamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -312,7 +314,7 @@ public class ViewRecipeFragment extends Fragment {
             @Override
             public void onFailure(Call<Recipe> call, Throwable t) {
                 Save.setEnabled(true);
-                Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Hubo un error al comunicarse con el servidor", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -330,7 +332,7 @@ public class ViewRecipeFragment extends Fragment {
                     @Override
                     public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                         if (!response.isSuccessful()) {
-                            Toast.makeText(getActivity(), "Something went wrong while deleting the recipe", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Algo salio mal al elimincar la receta", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -339,7 +341,7 @@ public class ViewRecipeFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<Recipe> call, Throwable t) {
-                        Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Hubo un error al comunicarse con el servidor", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -361,7 +363,7 @@ public class ViewRecipeFragment extends Fragment {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
                             if (!response.isSuccessful()) {
-                                Toast.makeText(getActivity(), "Ups!, something went wrong", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Ups!, algo salió mal", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             user = response.body();
@@ -371,7 +373,7 @@ public class ViewRecipeFragment extends Fragment {
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
-                            Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Hubo un error al comunicarse con el servidor", Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -380,7 +382,7 @@ public class ViewRecipeFragment extends Fragment {
                         @Override
                         public void onResponse(Call<User> call, Response<User> response) {
                             if (!response.isSuccessful()) {
-                                Toast.makeText(getActivity(), "Ups!, something went wrong", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Ups!, algo salió mal", Toast.LENGTH_SHORT).show();
                                 return;
                             }
 
@@ -391,7 +393,7 @@ public class ViewRecipeFragment extends Fragment {
 
                         @Override
                         public void onFailure(Call<User> call, Throwable t) {
-                            Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Hubo un error al comunicarse con el servidor", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

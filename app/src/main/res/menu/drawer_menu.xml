@@ -5,25 +5,25 @@
         <item
             android:id="@+id/homeNav"
             android:icon="@drawable/ic_home_black_24dp"
-            android:title="Home" />
+            android:title="Inicio" />
         <item
             android:id="@+id/recipeNav"
             android:icon="@drawable/ic_my_recipe"
-            android:title="My recipes" />
+            android:title="Mis recetas" />
         <item
             android:id="@+id/favoriteNav"
             android:icon="@drawable/ic_favorite_black_24dp"
-            android:title="My favorites" />
+            android:title="Mis favoritos" />
 
 
         <item
             android:id="@+id/profileNav"
             android:icon="@drawable/ic_profile"
-            android:title="Profile" />
+            android:title="Perfil" />
         <item
             android:id="@+id/logout"
             android:icon="@drawable/ic_exit_to_app_black_24dp"
-            android:title="Log Out" />
+            android:title="Cerrar Sesión" />
 
     </group>
 </menu>

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,8 +37,7 @@ import retrofit2.Response;
 public class CategoryFragment extends Fragment {
 
     private Recipe_App_API recipe_app_api = ApiClient.getClient().create(Recipe_App_API.class);
-    String[] categories = new String[]{"Soup", "Appetizer", "Salads", "Breads ", "Drinks", "Desserts", "Main Dish", "Side Dish"};
-
+    private String[] categories = new String[]{"Sopas", "Aperitivos", "Ensaladas", "Panes ", "Bebidas", "Postres", "Entradas", "Guarniciones"};
 
     private int category;
 
@@ -45,6 +45,8 @@ public class CategoryFragment extends Fragment {
     private ArrayList<Recipe> recipes = new ArrayList<>();
 
     private TextView Label;
+    private ProgressBar progressBar;
+
 
     public CategoryFragment() {
         // Required empty public constructor
@@ -77,7 +79,7 @@ public class CategoryFragment extends Fragment {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Hubo un error al comunicarse con el servidor", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -85,6 +87,9 @@ public class CategoryFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        progressBar = getView().findViewById(R.id.loading_list);
+
         setLabel();
         initRecipes_With_RecyclerView();
     }
@@ -93,7 +98,7 @@ public class CategoryFragment extends Fragment {
         Label = getView().findViewById(R.id.category_label);
         for(int i = 0; i < categories.length; i++) {
             if(category == i + 1)
-                Label.setText("Looking by\n" + categories[i]);
+                Label.setText("Buscando por\n" + categories[i]);
         }
     }
 
@@ -123,18 +128,19 @@ public class CategoryFragment extends Fragment {
             @Override
             public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
                 if(!response.isSuccessful()) {
-                    Toast.makeText(getActivity(), "Error while fetching list, please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Error al cargar la lista, intentelo nuevamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 recipes = response.body();
                 adapter.setRecipesList(recipes);
-
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
-                Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Hubo un error al comunicarse con el servidor", Toast.LENGTH_SHORT).show();
             }
         });
     }

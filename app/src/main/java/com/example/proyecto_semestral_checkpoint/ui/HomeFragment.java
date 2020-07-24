@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.proyecto_semestral_checkpoint.R;
@@ -37,10 +38,12 @@ import retrofit2.Response;
 public class HomeFragment extends Fragment {
 
     private Recipe_App_API recipe_app_api = ApiClient.getClient().create(Recipe_App_API.class);
-    String[] categories = new String[]{"Soup", "Appetizer", "Salads", "Breads ", "Drinks", "Desserts", "Main Dish", "Side Dish"};
+    private String[] categories = new String[]{"Sopas", "Aperitivos", "Ensaladas", "Panes ", "Bebidas", "Postres", "Entradas", "Guarniciones"};
 
     private User user;
     private ArrayList<Recipe> recipes = new ArrayList<>();
+
+    private ProgressBar progressBar;
 
     private ArrayList<String> cNames = new ArrayList<>();
     private ArrayList<Integer> cImages = new ArrayList<>();
@@ -69,7 +72,7 @@ public class HomeFragment extends Fragment {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Hubo un error al comunicarse con el servidor", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -82,6 +85,8 @@ public class HomeFragment extends Fragment {
             cNames.clear();
             cImages.clear();
         }
+
+        progressBar = getView().findViewById(R.id.loading_list);
 
         initCategoryMenu();
 
@@ -120,7 +125,6 @@ public class HomeFragment extends Fragment {
 
                     Bundle bundle = new Bundle();
                     bundle.putInt("category",category);
-                    Log.d("CATEGORY", "onItemClick: " + category);
                     Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.action_homeFragment_to_categoryFragment, bundle);
                 } catch (Exception e) {
                     Log.d("EXCEPTION", "onItemClick: " + e);
@@ -159,18 +163,20 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
                 if(!response.isSuccessful()) {
-                    Toast.makeText(getActivity(), "Error while fetching list, please try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Error al cargar la lista, intentelo nuevamente", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 recipes = response.body();
                 adapter.setRecipesList(recipes);
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
 
             }
 
             @Override
             public void onFailure(Call<ArrayList<Recipe>> call, Throwable t) {
-                Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Hubo un error al comunicarse con el servidor", Toast.LENGTH_SHORT).show();
             }
         });
     }

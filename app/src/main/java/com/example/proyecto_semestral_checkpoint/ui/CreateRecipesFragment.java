@@ -34,7 +34,7 @@ import retrofit2.Response;
 public class CreateRecipesFragment extends Fragment {
 
     private Recipe_App_API recipe_app_api = ApiClient.getClient().create(Recipe_App_API.class);
-    private String[] categories = new String[]{"Soup", "Appetizer", "Salads", "Breads ", "Drinks", "Desserts", "Main Dish", "Side Dish"};
+    String[] categories = new String[]{"Sopas", "Aperitivos", "Ensaladas", "Panes ", "Bebidas", "Postres", "Entradas", "Guarniciones"};
 
     private EditText Name, Ingredients, Description;
     private Spinner Categories;
@@ -82,15 +82,15 @@ public class CreateRecipesFragment extends Fragment {
                 //Check if their'r empty
                 if(!isValidName) {
                     Name.requestFocus();
-                    Name.setError("Recipe Name can't be empty");
+                    Name.setError("El nombre no puede estar vacío.");
                 }
                 if(!isValidDescription) {
                     Description.requestFocus();
-                    Description.setError("Description can't be empty");
+                    Description.setError("Las instrucciones no pueden estar vacío.");
                 }
                 if(!isValidIngredients) {
                     Ingredients.requestFocus();
-                    Ingredients.setError("Ingredients can't be empty");
+                    Ingredients.setError("Los ingredientes no pueden estar vacío.");
                 } else {
 
                     //Check ingredients
@@ -99,7 +99,7 @@ public class CreateRecipesFragment extends Fragment {
                     if(newIngredients.length > 6) {
                         isValidIngredients = false;
                         Ingredients.requestFocus();
-                        Ingredients.setError("You can't add more than 6 ingredients");
+                        Ingredients.setError("No puedes agregar mas de 6 ingredientes");
                     }
 
                     //Add ingredients on array list
@@ -148,7 +148,7 @@ public class CreateRecipesFragment extends Fragment {
             public void onResponse(Call<Recipe> call, Response<Recipe> response) {
                 if(!response.isSuccessful()) {
                     Save.setEnabled(true);
-                    Toast.makeText(getActivity(), "Error while creating recipe, make sure your data is correct", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Error al crear receta, verifique los campos estén correctos", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -161,7 +161,7 @@ public class CreateRecipesFragment extends Fragment {
             @Override
             public void onFailure(Call<Recipe> call, Throwable t) {
                 Save.setEnabled(true);
-                Toast.makeText(getActivity(), "Something went wrong connecting to the server", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Hubo un error al comunicarse con el servidor", Toast.LENGTH_SHORT).show();
             }
         });
     }

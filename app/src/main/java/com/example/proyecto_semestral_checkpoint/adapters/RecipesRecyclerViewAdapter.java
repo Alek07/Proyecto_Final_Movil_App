@@ -93,6 +93,8 @@ public class RecipesRecyclerViewAdapter extends RecyclerView.Adapter<RecipesRecy
                     .error(R.drawable.food);
 
             Glide.with(cContext).load(ApiClient.getBaseUrl() + "recipes/" + recipe.get_id() + "/images/" + recipe.getImages().get(0).get("_id")).apply(options).into(holder.image);
+        } else {
+            Glide.with(cContext).load(R.drawable.food).into(holder.image);
         }
     }
 

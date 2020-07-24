@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:labelFor="@+id/email"
             android:paddingLeft="10dp"
-            android:text="User Name"
+            android:text="Nombre de Usuario"
             android:textSize="20sp" />
 
         <EditText
@@ -65,7 +65,7 @@
             android:layout_marginVertical="10sp"
             android:inputType="textEmailAddress"
             android:nextFocusDown="@id/email"
-            android:hint="Unique name"
+            android:hint="Tu nombre debe ser unico"
             android:singleLine="true"
             android:textAlignment="textStart"
             android:textSize="20dp" />
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:labelFor="@+id/email"
             android:paddingLeft="10dp"
-            android:text="Email"
+            android:text="Correo Electrónico"
             android:textSize="20sp" />
 
         <EditText
@@ -85,7 +85,7 @@
             android:layout_marginVertical="10sp"
             android:inputType="textEmailAddress"
             android:nextFocusDown="@id/password"
-            android:hint="Unique email"
+            android:hint="Tu correo debe ser unico"
             android:singleLine="true"
             android:textAlignment="textStart"
             android:textSize="20dp" />
@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:labelFor="@+id/password"
             android:paddingLeft="10dp"
-            android:text="Password"
+            android:text="Contraseña"
             android:textSize="20sp" />
 
         <EditText
@@ -107,7 +107,7 @@
             android:keyboardNavigationCluster="true"
             android:nextClusterForward="@id/btnLogin"
             android:nextFocusDown="@id/btnLogin"
-            android:hint="More than 9 characters"
+            android:hint="Mas de 9 caracteres"
             android:singleLine="true"
             android:textAlignment="textStart"
             android:textSize="20dp" />
@@ -124,7 +124,7 @@
                 android:layout_height="35dp"
                 android:background="@drawable/custom_button"
                 android:layout_gravity="center"
-                android:text="Sign Up"
+                android:text="Registrarse"
                 android:textColor="#ffff"
                 android:textSize="15sp" />
 
@@ -135,7 +135,7 @@
                 android:layout_alignBottom="@id/btnLogin"
                 android:layout_gravity="center"
                 android:layout_marginTop="18dp"
-                android:text="Already have an account? Sign In"
+                android:text="Ya tienes cuenta? Inicia sesión"
                 android:textSize="15dp"
                 android:textStyle="bold" />
 
